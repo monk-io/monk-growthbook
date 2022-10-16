@@ -66,7 +66,7 @@ The variables are in `stack.yml` file. You can quickly setup by editing the valu
 
 | Variable                     	| Description                               	|
 |------------------------------	|-------------------------------------------	|
-| expose_port                    | MSSQL database port, Default: 1433 	               |
+| expose_port                    | Monk listen port, Default: 8080 	               |
 
 
 ## Stop, remove and clean up workloads and templates

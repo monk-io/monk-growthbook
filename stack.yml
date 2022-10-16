@@ -1,0 +1,12 @@
+namespace: monk-gost
+
+stack:
+  defines: process-group
+  runnable-list:
+    - monk-gost/gost
+  variables:
+    expose_port:
+      type: int
+      value: 8080
+
+    
