@@ -10,7 +10,7 @@ gost:
     description: A simple security tunnel written in golang.
     website: https://gost.run/en/
     publisher: monk.io
-    icon: vault-hashicorp.png 
+    icon: https://gost.run/images/gost.png 
   containers:
     monk-gost:
       image: ginuerzh/gost
