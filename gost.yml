@@ -4,6 +4,13 @@ namespace: monk-gost
 
 gost:
   defines: runnable
+  metadata:
+    defines: metadata
+    name: Gost
+    description: A simple security tunnel written in golang.
+    website: https://gost.run/en/
+    publisher: monk.io
+    icon: vault-hashicorp.png 
   containers:
     monk-gost:
       image: ginuerzh/gost

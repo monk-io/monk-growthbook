@@ -61,6 +61,10 @@ foo@bar:~$ monk run monk-gost/stack
 💡 Check monk help for more!
 ```
 
+## Test
+
+`curl -x 13.50.100.228:8080 https://myip.today`
+
 ## Variables
 The variables are in `stack.yml` file. You can quickly setup by editing the values here.
 
@@ -68,6 +72,19 @@ The variables are in `stack.yml` file. You can quickly setup by editing the valu
 |------------------------------	|-------------------------------------------	|
 | expose_port                    | Monk listen port, Default: 8080 	               |
 
+## Config file
+
+It is config.json file
+
+``` 
+{
+    "Debug": true,
+    "Retries": 0,
+    "ServeNodes": [
+        ":8080"
+    ]
+}
+```
 
 ## Stop, remove and clean up workloads and templates
 
