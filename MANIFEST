@@ -1,3 +1,0 @@
-REPO gost
-LOAD gost.yml stack.yml
-RESOURCES config.json
