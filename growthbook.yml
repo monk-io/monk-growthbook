@@ -38,7 +38,8 @@ growthbook:
       value: <- `${monk-volume-path}/growthbook`
   containers:
     monk-growthbook:
-      image: 'growthbook/growthbook:latest'
+      image: 'growthbook/growthbook'
+      image-tag: <- `${growthbook-image}`
       ports:
         - <- `0.0.0.0:${growthbook_port1}:3100`
         - <- `0.0.0.0:${growthbook_port2}:3000`

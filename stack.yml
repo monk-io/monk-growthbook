@@ -27,3 +27,6 @@ stack:
     db_username:
       type: string
       value: monk
+    growthbook-image:
+      type: string
+      value: latest
