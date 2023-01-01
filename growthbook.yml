@@ -9,6 +9,10 @@ growthbook:
     publisher: monk.io
     icon: https://uploads-ssl.webflow.com/62019b0bccbb27eb8ff291bb/62019c940010d720321b0356_growth-book-logo-white.svg
   defines: runnable
+  connections:
+    growthbook-db:
+      runnable: monk-growthbook/growthbook-db
+      service: monk-mongo-db
   variables:
     growthbook_api_origin:
       env: APP_ORIGIN
@@ -24,7 +28,7 @@ growthbook:
       value: <- `${growthbook_http}://${growthbook_domain}:3100`
     mongo_db_host:
       type: string
-      value: <- get-hostname("monk-growthbook/growthbook-db", "monk-mongo-db") split(".dns.podman") join("")
+      value: <- connection-hostname("growthbook-db")
     admin_token:
       env: MONGODB_URI
       type: string
@@ -40,7 +44,22 @@ growthbook:
         - <- `0.0.0.0:${growthbook_port2}:3000`
       paths:
         - <- `${volume_local}:/usr/local/src/app/packages/back-end/uploads`
-
+  depends:
+    wait-for:
+      runnables:
+        - monk-growthbook/growthbook-db
+      timeout: 30
+  services:
+    grothbook-svc:
+      container: monk-growthbook
+      port: 3100
+      protocol: tcp
+      host-port: <- `${growthbook_port1}`
+    grothbook-svc2:
+      container: monk-growthbook
+      port: 3000
+      protocol: tcp
+      host-port: <- `${growthbook_port2}`
 growthbook-db:
   defines: runnable
   variables:
@@ -57,4 +76,9 @@ growthbook-db:
       value: <- `${monk-volume-path}/growthbook-db`
   containers:
     monk-mongo-db:
-      image: 'mongo:latest'
+      image: 'mongo:4.4'
+  services:
+    monk-mongo-db:
+      port: 27017
+      container: monk-mongo-db
+      protocol: tcp

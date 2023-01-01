@@ -24,3 +24,6 @@ stack:
     db_password:
       type: string
       value: monk
+    db_username:
+      type: string
+      value: monk
