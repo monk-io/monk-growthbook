@@ -21,57 +21,57 @@ not connected to cluster
 ## Clone Repository
 
 ```bash
-git clone https://github.com/monk-io/monk-growthbook
+git clone https://github.com/monk-io/growthbook
 ```
 
 ## Load Template
 
 ```bash
-cd monk-growthbook
+cd growthbook
 monk load MANIFEST
 ```
 
 ### Let's take a look at the themes I have installed
 
 ```bash
-foo@bar:~$ monk list monk-growthbook
+foo@bar:~$ monk list growthbook
 ✔ Got the list
 Type      Template                       Repository  Version  Tags
-runnable  monk-growthbook/growthbook     local       -        -
-runnable  monk-growthbook/growthbook-db  local       -        -
-group     monk-growthbook/stack          local       -        -
+runnable  growthbook/growthbook     local       -        -
+runnable  growthbook/growthbook-db  local       -        -
+group     growthbook/stack          local       -        -
 ```
 
 ## Deploy Stack
 
 ```bash
 foo@bar:~$ monk run monk-vaultwarden/stack
-? Select tag to run [local/monk-growthbook/stack] on: mnk
-✔ Starting the job: local/monk-growthbook/stack... DONE
+? Select tag to run [local/growthbook/stack] on: mnk
+✔ Starting the job: local/growthbook/stack... DONE
 ✔ Preparing nodes DONE
 ✔ Checking/pulling images...
 ✔ [================================================] 100% growthbook/growthbook:latest mnk
 ✔ [================================================] 100% mongo:latest mnk
 ✔ Checking/pulling images DONE
 ✔ Starting containers DONE
-✔ Started local/monk-growthbook/stack
+✔ Started local/growthbook/stack
 
-🔩 templates/local/monk-growthbook/stack
+🔩 templates/local/growthbook/stack
  └─🧊 Peer mnk
-    ├─🔩 templates/local/monk-growthbook/growthbook
+    ├─🔩 templates/local/growthbook/growthbook
     │  └─📦 aaf1b34cf8be374551539e3d6d6fbd19-ok-growthbook-monk-vaultwarden
     │     ├─🧩 growthbook/growthbook:latest
     │     ├─💾 /var/lib/monkd/volumes/growthbook -> /usr/local/src/app/packages/back-end/uploads
     │     ├─🔌 open <ip>:3100 (0.0.0.0:3100) -> 3100
     │     └─🔌 open <ip>:3000 (0.0.0.0:3000) -> 3000
-    └─🔩 templates/local/monk-growthbook/growthbook-db
+    └─🔩 templates/local/growthbook/growthbook-db
        └─📦 0921ecdbc1abeef8f50ff0c1208b520d-ok-growthbook-db-monk-mongo-db
           └─🧩 mongo:latest
 
 💡 You can inspect and manage your above stack with these commands:
- monk logs (-f) local/monk-growthbook/stack - Inspect logs
- monk shell     local/monk-growthbook/stack - Connect to the container's shell
- monk do        local/monk-growthbook/stack/action_name - Run defined action (if exists)
+ monk logs (-f) local/growthbook/stack - Inspect logs
+ monk shell     local/growthbook/stack - Connect to the container's shell
+ monk do        local/growthbook/stack/action_name - Run defined action (if exists)
 💡 Check monk help for more!
 ```
 
@@ -95,5 +95,5 @@ The variables are in `stack.yml` file. You can quickly setup by editing the valu
 ## Stop, remove and clean up workloads and templates
 
 ```bash
-monk purge monk-growthbook
+monk purge growthbook
 ```

@@ -1,4 +1,4 @@
-namespace: monk-growthbook
+namespace: growthbook
 
 growthbook:
   metadata:
@@ -11,7 +11,7 @@ growthbook:
   defines: runnable
   connections:
     growthbook-db:
-      runnable: monk-growthbook/growthbook-db
+      runnable: growthbook/growthbook-db
       service: monk-mongo-db
   variables:
     growthbook_api_origin:
@@ -37,7 +37,7 @@ growthbook:
       type: string
       value: <- `${monk-volume-path}/growthbook`
   containers:
-    monk-growthbook:
+    growthbook:
       image: 'growthbook/growthbook'
       image-tag: <- `${growthbook-image}`
       ports:
@@ -48,16 +48,16 @@ growthbook:
   depends:
     wait-for:
       runnables:
-        - monk-growthbook/growthbook-db
+        - growthbook/growthbook-db
       timeout: 30
   services:
     grothbook-svc:
-      container: monk-growthbook
+      container: growthbook
       port: 3100
       protocol: tcp
       host-port: <- `${growthbook_port1}`
     grothbook-svc2:
-      container: monk-growthbook
+      container: growthbook
       port: 3000
       protocol: tcp
       host-port: <- `${growthbook_port2}`

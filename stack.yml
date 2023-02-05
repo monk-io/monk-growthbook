@@ -1,10 +1,10 @@
-namespace: monk-growthbook
+namespace: growthbook
 
 stack:
   defines: process-group
   runnable-list:
-    - monk-growthbook/growthbook
-    - monk-growthbook/growthbook-db
+    - growthbook/growthbook
+    - growthbook/growthbook-db
   variables:
     jtw_secret:
       type: string
