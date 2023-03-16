@@ -61,7 +61,10 @@ growthbook:
       port: 3000
       protocol: tcp
       host-port: <- `${growthbook_port2}`
+      
 growthbook-db:
+  metadata:
+    private: true
   defines: runnable
   variables:
     db_root_password:
