@@ -31,47 +31,45 @@ cd growthbook
 monk load MANIFEST
 ```
 
-### Let's take a look at the themes I have installed
-
 ```bash
 foo@bar:~$ monk list growthbook
 ✔ Got the list
-Type      Template                       Repository  Version  Tags
-runnable  growthbook/growthbook     local       -        -
-runnable  growthbook/growthbook-db  local       -        -
-group     growthbook/stack          local       -        -
+Type      Template                  Repository  Version  Tags
+runnable  growthbook/growthbook     local       -        A/B testing, Conversion optimization, Experimentation, Growth hacking, Analytics, User engagement, Product optimization, Data-driven decision making, Personalization, Customer insights, Marketing optimization, Funnel optimization, Performance tracking, Website optimization, Conversion rate optimization
+runnable  growthbook/growthbook-db  local       -        NoSQL, Document database, Database management, JSON, Scalability, High availability, Performance optimization, Indexing, Sharding, Aggregation, Replication, Data modeling, Cloud database, Big data
+group     growthbook/stack          local       -        A/B testing, Conversion optimization, Experimentation, Growth hacking, Analytics, User engagement, Product optimization, Data-driven decision making, Personalization, Customer insights, Marketing optimization, Funnel optimization, Performance tracking, Website optimization, Conversion rate optimization
 ```
 
 ## Deploy Stack
 
 ```bash
 foo@bar:~$ monk run monk-vaultwarden/stack
-? Select tag to run [local/growthbook/stack] on: mnk
-✔ Starting the job: local/growthbook/stack... DONE
+? Select which 'growthbook/stack' to run local/growthbook/stack
+✔ Starting the run job: local/growthbook/stack... DONE
 ✔ Preparing nodes DONE
 ✔ Checking/pulling images...
-✔ [================================================] 100% growthbook/growthbook:latest mnk
-✔ [================================================] 100% mongo:latest mnk
+✔ [================================================] 100% mongo:4.4 local
+✔ [================================================] 100% growthbook/growthbook:latest local
 ✔ Checking/pulling images DONE
 ✔ Starting containers DONE
+✔ New container local-9211f08d68e7ede3744bb8599c-ok-growthbook-db-monk-mongo-db created DONE
+✔ New container local-c5654f9095967143fe7abdbaed-owthbook-growthbook-growthbook created DONE
 ✔ Started local/growthbook/stack
-
 🔩 templates/local/growthbook/stack
- └─🧊 Peer mnk
+ └─🧊 Peer local
     ├─🔩 templates/local/growthbook/growthbook
-    │  └─📦 aaf1b34cf8be374551539e3d6d6fbd19-ok-growthbook-monk-vaultwarden
+    │  └─📦 local-c5654f9095967143fe7abdbaed-owthbook-growthbook-growthbook running
     │     ├─🧩 growthbook/growthbook:latest
-    │     ├─💾 /var/lib/monkd/volumes/growthbook -> /usr/local/src/app/packages/back-end/uploads
-    │     ├─🔌 open <ip>:3100 (0.0.0.0:3100) -> 3100
-    │     └─🔌 open <ip>:3000 (0.0.0.0:3000) -> 3000
+    │     └─💾 /var/lib/monkd/volumes/growthbook/data -> /usr/local/src/app/packages/back-end/uploads
     └─🔩 templates/local/growthbook/growthbook-db
-       └─📦 0921ecdbc1abeef8f50ff0c1208b520d-ok-growthbook-db-monk-mongo-db
-          └─🧩 mongo:latest
+       └─📦 local-9211f08d68e7ede3744bb8599c-ok-growthbook-db-monk-mongo-db running
+          ├─🧩 mongo:4.4
+          └─💾 /var/lib/monkd/volumes/growthbook/mongo -> /data/db
 
 💡 You can inspect and manage your above stack with these commands:
- monk logs (-f) local/growthbook/stack - Inspect logs
- monk shell     local/growthbook/stack - Connect to the container's shell
- monk do        local/growthbook/stack/action_name - Run defined action (if exists)
+        monk logs (-f) local/growthbook/stack - Inspect logs
+        monk shell     local/growthbook/stack - Connect to the container's shell
+        monk do        local/growthbook/stack/action_name - Run defined action (if exists)
 💡 Check monk help for more!
 ```
 
@@ -84,7 +82,7 @@ foo@bar:~$ monk run monk-vaultwarden/stack
 The variables are in `stack.yml` file. You can quickly setup by editing the values here.
 
 | Variable          | Description                   | Defaults           |
-|-------------------|-------------------------------|--------------------|
+| ----------------- | ----------------------------- | ------------------ |
 | jtw_secret        | Growthbook jwt secret         | monk               |
 | growthbook_domain | Growthbook domain             | growthbook.monk.io |
 | growthbook_http   | http protocol (http or https) | http               |

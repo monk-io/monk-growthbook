@@ -1,7 +1,17 @@
+---
 namespace: growthbook
 
 stack:
   defines: process-group
+  metadata:
+    name: Growthbook
+    shortname: Growthbook
+    description: GrowthBook is an open source platform that gives any company the power of a customized feature flagging and A/B testing system.
+    website: https://www.growthbook.io/
+    publisher: monk.io
+    icon: https://camo.githubusercontent.com/f18e64d542d0c5a36f243af2c4b99d56fbdf356674fa3fe3b7ba402829ab8345/68747470733a2f2f63646e2e67726f777468626f6f6b2e696f2f67726f777468626f6f6b2d6c6f676f4032782e706e67
+    tags: A/B testing, Conversion optimization, Experimentation, Growth hacking, Analytics, User engagement, Product optimization, Data-driven decision making, Personalization, Customer insights, Marketing optimization, Funnel optimization, Performance tracking, Website optimization, Conversion rate optimization
+    version: 1.0
   runnable-list:
     - growthbook/growthbook
     - growthbook/growthbook-db

@@ -1,14 +1,18 @@
+---
 namespace: growthbook
 
 growthbook:
+  defines: runnable
   metadata:
-    defines: metadata
     name: Growthbook
+    shortname: Growthbook
     description: GrowthBook is an open source platform that gives any company the power of a customized feature flagging and A/B testing system.
     website: https://www.growthbook.io/
     publisher: monk.io
-    icon: https://uploads-ssl.webflow.com/62019b0bccbb27eb8ff291bb/62019c940010d720321b0356_growth-book-logo-white.svg
-  defines: runnable
+    icon: https://camo.githubusercontent.com/f18e64d542d0c5a36f243af2c4b99d56fbdf356674fa3fe3b7ba402829ab8345/68747470733a2f2f63646e2e67726f777468626f6f6b2e696f2f67726f777468626f6f6b2d6c6f676f4032782e706e67
+    version: 1.0
+    tags: A/B testing, Conversion optimization, Experimentation, Growth hacking, Analytics, User engagement, Product optimization, Data-driven decision making, Personalization, Customer insights, Marketing optimization, Funnel optimization, Performance tracking, Website optimization, Conversion rate optimization
+    private: true
   connections:
     growthbook-db:
       runnable: growthbook/growthbook-db
@@ -33,18 +37,12 @@ growthbook:
       env: MONGODB_URI
       type: string
       value: <- `mongodb://${db_username}:${db_password}@${mongo_db_host}:27017/`
-    volume_local:
-      type: string
-      value: <- `${monk-volume-path}/growthbook`
   containers:
     growthbook:
-      image: 'growthbook/growthbook'
+      image: growthbook/growthbook
       image-tag: <- `${growthbook-image}`
-      ports:
-        - <- `0.0.0.0:${growthbook_port1}:3100`
-        - <- `0.0.0.0:${growthbook_port2}:3000`
       paths:
-        - <- `${volume_local}:/usr/local/src/app/packages/back-end/uploads`
+        - <- `${monk-volume-path}/growthbook/data:/usr/local/src/app/packages/back-end/uploads`
   depends:
     wait-for:
       runnables:
@@ -61,11 +59,19 @@ growthbook:
       port: 3000
       protocol: tcp
       host-port: <- `${growthbook_port2}`
-      
+
 growthbook-db:
-  metadata:
-    private: true
   defines: runnable
+  metadata:
+    name: Mongodb
+    description: The developer data platform that provides the services and tools necessary to build distributed applications fast, at the performance and scale users demand.
+    tags: NoSQL, Document database, Database management, JSON, Scalability, High availability, Performance optimization, Indexing, Sharding, Aggregation, Replication, Data modeling, Cloud database, Big data
+    website: https://github.com/mongodb/mongo
+    source: https://www.mongodb.com/
+    publisher: monk.io
+    icon: https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRA8VbFgxH-i78AZmNqD93mVRkTRd30POqLeCmg9T05ug&s
+    version: 1.0
+    private: true
   variables:
     db_root_password:
       env: MONGO_INITDB_ROOT_PASSWORD
@@ -75,12 +81,11 @@ growthbook-db:
       env: MONGO_INITDB_ROOT_USERNAME
       type: string
       value: <- `${db_username}`
-    volume_local:
-      type: string
-      value: <- `${monk-volume-path}/growthbook-db`
   containers:
     monk-mongo-db:
-      image: 'mongo:4.4'
+      image: mongo:4.4
+      paths:
+        - <- `${monk-volume-path}/growthbook/mongo:/data/db`
   services:
     monk-mongo-db:
       port: 27017
