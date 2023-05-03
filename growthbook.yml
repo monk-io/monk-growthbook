@@ -16,31 +16,52 @@ growthbook:
   connections:
     growthbook-db:
       runnable: growthbook/growthbook-db
-      service: monk-mongo-db
+      service: mongo
   variables:
-    growthbook_api_origin:
-      env: APP_ORIGIN
-      type: string
-      value: <- `${growthbook_http}://${growthbook_domain}:3000`
-    growthbook_jwt_secret:
-      env: JWT_SECRET
-      type: string
-      value: <- `${jtw_secret}`
-    growthbook_api_host:
-      env: API_HOST
-      type: string
-      value: <- `${growthbook_http}://${growthbook_domain}:3100`
-    mongo_db_host:
+    db_host:
       type: string
       value: <- connection-hostname("growthbook-db")
+    jwt_secret:
+      env: JWT_SECRET
+      type: string
+      value: <- random-uuid
+    grow_protocol:
+      type: string
+      value: <- $protocol default("http")
+    grow_domain:
+      type: string
+      value: <- $domain default(ip-address-public)
+    grow_ui_port:
+      type: int
+      value: <- $ui_port default(3000)
+    grow_api_port:
+      type: int
+      value: <- $api_port default(3100)
+    grow_db_username:
+      type: string
+      value: <- $db_username default("monk")
+    grow_db_password:
+      type: string
+      value: <- $db_password default("monk")
+    grow_image:
+      type: string
+      value: <- $growthbook-image-tag default("latest")
+    app_origin:
+      env: APP_ORIGIN
+      type: string
+      value: <- $grow_protocol "://" $grow_domain ":" $grow_ui_port concat-all
+    api_host:
+      env: API_HOST
+      type: string
+      value: <- $grow_protocol "://" $grow_domain ":" $grow_api_port concat-all
     admin_token:
       env: MONGODB_URI
       type: string
-      value: <- `mongodb://${db_username}:${db_password}@${mongo_db_host}:27017/`
+      value: <- "mongodb://" $grow_db_username ":" $grow_db_password "@" $db_host ":27017/" concat-all
   containers:
     growthbook:
       image: growthbook/growthbook
-      image-tag: <- `${growthbook-image}`
+      image-tag: <- `${grow_image}`
       paths:
         - <- `${monk-volume-path}/growthbook/data:/usr/local/src/app/packages/back-end/uploads`
   depends:
@@ -49,16 +70,16 @@ growthbook:
         - growthbook/growthbook-db
       timeout: 30
   services:
-    grothbook-svc:
-      container: growthbook
-      port: 3100
-      protocol: tcp
-      host-port: <- `${growthbook_port1}`
-    grothbook-svc2:
+    grothbook-ui:
       container: growthbook
       port: 3000
       protocol: tcp
-      host-port: <- `${growthbook_port2}`
+      host-port: <- $grow_ui_port
+    grothbook-api:
+      container: growthbook
+      port: 3100
+      protocol: tcp
+      host-port: <- $grow_api_port
 
 growthbook-db:
   defines: runnable
@@ -73,21 +94,22 @@ growthbook-db:
     version: 1.0
     private: true
   variables:
-    db_root_password:
-      env: MONGO_INITDB_ROOT_PASSWORD
-      type: string
-      value: <- `${db_password}`
     db_root_username:
       env: MONGO_INITDB_ROOT_USERNAME
       type: string
-      value: <- `${db_username}`
+      value: <- $db_username default("monk")
+    db_root_password:
+      env: MONGO_INITDB_ROOT_PASSWORD
+      type: string
+      value: <- $db_password default("monk")
   containers:
-    monk-mongo-db:
-      image: mongo:4.4
+    mongo:
+      image: mongo
+      image-tag: '4.4'
       paths:
         - <- `${monk-volume-path}/growthbook/mongo:/data/db`
   services:
-    monk-mongo-db:
+    mongo:
       port: 27017
-      container: monk-mongo-db
+      container: mongo
       protocol: tcp
