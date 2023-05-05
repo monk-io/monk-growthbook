@@ -18,6 +18,9 @@ growthbook:
       runnable: growthbook/growthbook-db
       service: mongo
   variables:
+    ip-address-public:
+      type: string
+      value: <- ip-address-public
     db_host:
       type: string
       value: <- connection-hostname("growthbook-db")
@@ -30,7 +33,7 @@ growthbook:
       value: <- $protocol default("http")
     grow_domain:
       type: string
-      value: <- $domain default(ip-address-public)
+      value: <- $domain default($ip-address-public)
     grow_ui_port:
       type: int
       value: <- $ui_port default(3000)
