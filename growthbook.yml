@@ -11,7 +11,7 @@ growthbook:
     publisher: monk.io
     icon: https://camo.githubusercontent.com/f18e64d542d0c5a36f243af2c4b99d56fbdf356674fa3fe3b7ba402829ab8345/68747470733a2f2f63646e2e67726f777468626f6f6b2e696f2f67726f777468626f6f6b2d6c6f676f4032782e706e67
     version: 1.0
-    tags: A/B testing, Conversion optimization, Experimentation, Growth hacking, Analytics, User engagement, Product optimization, Data-driven decision making, Personalization, Customer insights, Marketing optimization, Funnel optimization, Performance tracking, Website optimization, Conversion rate optimization
+    tags: product optimization, conversion optimization, performance tracking, user engagement, marketing optimization, growth hacking, customer insights, funnel optimization, website optimization, a/b testing, conversion rate optimization, personalization, experimentation, data-driven decision making, analytics
     private: true
   connections:
     growthbook-db:
@@ -89,7 +89,7 @@ growthbook-db:
   metadata:
     name: Mongodb
     description: The developer data platform that provides the services and tools necessary to build distributed applications fast, at the performance and scale users demand.
-    tags: NoSQL, Document database, Database management, JSON, Scalability, High availability, Performance optimization, Indexing, Sharding, Aggregation, Replication, Data modeling, Cloud database, Big data
+    tags: database management, high availability, indexing, aggregation, big data, scalability, json, performance optimization, nosql, replication, document database, sharding, data modeling
     website: https://github.com/mongodb/mongo
     source: https://www.mongodb.com/
     publisher: monk.io
