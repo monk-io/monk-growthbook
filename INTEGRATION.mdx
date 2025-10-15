@@ -1,0 +1,218 @@
+---
+title: GrowthBook
+description: Ready-to-run GrowthBook container template you can run directly or inherit to integrate feature flagging and A/B testing into your stack.
+primary_category: devops
+tags: [growthbook, feature-flags, ab-testing, experimentation, template, runnable, analytics]
+integration_type: template
+hosting_models: [self-hosted]
+website_url: https://www.growthbook.io/
+docs_url: https://docs.growthbook.io/
+publisher: monk.io
+---
+
+## Overview
+
+This template provides a production‑ready GrowthBook instance as a Monk runnable. You can:
+
+- Run it directly to get a managed feature flagging and A/B testing platform
+- Inherit it in your own runnable to seamlessly add experimentation capabilities to your stack
+
+GrowthBook is an open-source platform for feature flagging and A/B testing. It helps teams release features safely, run experiments, and make data-driven decisions without vendor lock-in.
+
+## What this template manages
+
+- GrowthBook application server
+- MongoDB for data storage
+- Web UI and API on port 3000
+- Feature flag management and experiment analysis engine
+- Persistent volumes for data
+
+## Quick start (run directly)
+
+1) Load templates
+
+```bash
+monk load MANIFEST
+```
+
+2) Run GrowthBook stack
+
+```bash
+monk run growthbook/stack
+```
+
+3) Customize configuration (recommended via inheritance)
+
+Running directly uses the defaults defined in this template's `variables`. Secrets added with `monk secrets add` will not affect this runnable unless you inherit it and reference those secrets.
+
+- Preferred: inherit and replace variables with `secret("...")` as shown below.
+- Alternative: fork/clone and edit the `variables` in the template files, then `monk load MANIFEST` and run.
+
+Once started, access GrowthBook at `http://localhost:3000`. Create your admin account on first login.
+
+## Configuration
+
+Key variables you can customize in this template:
+
+```yaml
+variables:
+  growthbook-image-tag: "latest"      # GrowthBook container image tag
+  growthbook-port: "3000"             # web UI and API port
+  app-origin: "http://localhost:3000" # application URL (env: APP_ORIGIN)
+  jwt-secret: "..."                   # JWT secret for auth (env: JWT_SECRET)
+  encryption-key: "..."               # encryption key (env: ENCRYPTION_KEY)
+  mongodb-uri: "mongodb://mongo:27017/growthbook" # MongoDB connection string
+  email-enabled: "false"              # enable email notifications
+  email-host: "smtp.gmail.com"        # SMTP host
+  email-port: "587"                   # SMTP port
+  email-from: "noreply@example.com"   # sender email address
+```
+
+Data is persisted under `${monk-volume-path}/mongodb` on the host.
+
+## Use by inheritance (recommended for apps)
+
+Inherit the GrowthBook runnable in your application and declare a connection. Example:
+
+```yaml
+namespace: myapp
+experiments:
+  defines: runnable
+  inherits: growthbook/stack
+  variables:
+    jwt-secret:
+      value: <- secret("growthbook-jwt-secret")
+    encryption-key:
+      value: <- secret("growthbook-encryption-key")
+    app-origin:
+      value: "https://experiments.myapp.com"
+api:
+  defines: runnable
+  containers:
+    api:
+      image: myorg/api
+  connections:
+    features:
+      runnable: experiments
+      service: growthbook
+  variables:
+    growthbook-api-host:
+      value: <- connection-hostname("features")
+    growthbook-client-key:
+      value: <- secret("growthbook-client-key")
+```
+
+Then set the secrets once and run your app group:
+
+```bash
+monk secrets add -g growthbook-jwt-secret="<random-secret>"
+monk secrets add -g growthbook-encryption-key="<random-key>"
+monk secrets add -g growthbook-client-key="<sdk-key>"
+monk run myapp/api
+```
+
+## Ports and connectivity
+
+- Service: `growthbook` on TCP port `3000` (Web UI and API)
+- API endpoint: `http://<host>:3000/api`
+- From other runnables in the same process group, use `connection-hostname("<connection-name>")` to resolve the GrowthBook host.
+- From apps, use GrowthBook SDKs to connect with the client key.
+
+## Persistence and configuration
+
+- MongoDB data path: `${monk-volume-path}/mongodb:/data/db`
+- All feature flags, experiments, and configuration are stored in MongoDB.
+
+## Features
+
+- **Feature Flags**: Toggle features on/off without deployment
+- **A/B Testing**: Run experiments and measure impact
+- **Targeting**: Target features by user attributes, percentage rollout
+- **SDK Support**: JavaScript, React, Python, Ruby, PHP, Go, Java, etc.
+- **Analytics Integration**: Google Analytics, Mixpanel, Segment, etc.
+- **Visual Editor**: No-code experiment setup
+- **Statistical Analysis**: Bayesian and Frequentist stats
+- **WYSIWYG Editor**: Visual changes without code
+- **Role-Based Access**: Team permissions
+
+## Feature Flag Usage
+
+JavaScript SDK example:
+
+```javascript
+import { GrowthBook } from "@growthbook/growthbook";
+
+const growthbook = new GrowthBook({
+  apiHost: "http://localhost:3000",
+  clientKey: "sdk-abc123",
+  enableDevMode: true,
+  attributes: {
+    id: userId,
+    country: "US",
+    premium: true
+  }
+});
+
+await growthbook.loadFeatures();
+
+// Check feature flag
+if (growthbook.isOn("new-checkout")) {
+  // Show new checkout flow
+}
+
+// Get feature value
+const theme = growthbook.getFeatureValue("theme", "light");
+```
+
+## A/B Testing
+
+Create experiments:
+1. Define hypothesis and metrics
+2. Create variations (A vs B)
+3. Set targeting and traffic split
+4. Launch experiment
+5. Monitor results in real-time
+6. View statistical significance
+
+## Analytics Integration
+
+Connect to your analytics:
+- **Data Sources**: Query experiment data from your warehouse
+- **Metrics**: Define success metrics from analytics events
+- **Attribution**: Automatic experiment tracking
+- **Supported**: SQL databases, BigQuery, Mixpanel, Segment
+
+## Use cases
+
+GrowthBook excels at:
+- Feature rollout management and progressive rollouts (canary releases)
+- A/B testing and multi-variate experimentation
+- Kill switches for production incidents
+- User targeting and personalization
+- Data-driven product decisions with statistical analysis
+
+## Related templates
+
+- Analytics: combine with monitoring tools (e.g., `prometheus-grafana/`) for observability
+- Databases: see other database templates in this repository for data source connections
+
+## Troubleshooting
+
+- Access GrowthBook UI at `http://localhost:3000`
+- Generate secrets with:
+
+```bash
+openssl rand -base64 32
+```
+
+- Get SDK keys in Settings → API Keys after first login
+- Check logs:
+
+```bash
+monk logs -l 500 -f growthbook/growthbook
+```
+
+- For feature flag issues, verify SDK connection and client key configuration
+- For experiment analysis, ensure analytics integration is configured in the UI
+- For MongoDB connection issues, verify the connection string
+- Enable debug mode in SDK for detailed troubleshooting
