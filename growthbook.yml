@@ -108,7 +108,7 @@ growthbook-db:
   containers:
     mongo:
       image: mongo
-      image-tag: '4.4'
+      image-tag: 'latest'
       paths:
         - <- `${monk-volume-path}/growthbook/mongo:/data/db`
   services:
